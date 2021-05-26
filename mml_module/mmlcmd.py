@@ -27,11 +27,6 @@ class MMLLength:
 
         return count
 
-        
-
-
-
-
 
 class MMLCommand:
     cmdname : str
@@ -53,11 +48,8 @@ class MMLCommand:
         self.count : int = 0
         self.length : MMLLength = None
         self.cmdnote = 0
+        self.is_slur = False
 
     def __str__(self):
         postext = str(self.pos)
         return format((self.cmdname, self.cmdtype, self.argtype, postext, self.value))
-
-
-
-

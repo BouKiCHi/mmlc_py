@@ -182,10 +182,20 @@ class Driver:
         
         if cmd.cmdtype == CommandTypeEnum.NOTE:
             dt.set_note(cmd.cmdnote)
-            dt.count += cmd.count
+            count = cmd.count
+            tmpcmd = cmd
+            while tmpcmd.is_slur:
+                tmpcmd = tr.command_list[dt.pos+1]
+                if tmpcmd.cmdnote != cmd.cmdnote:
+                    break
+
+                count += tmpcmd.count
+                dt.pos += 1
+
             start = self.seconds
-            end = self.seconds + (cmd.count * self.tick_per_seconds)
+            end = self.seconds + (count * self.tick_per_seconds)
             self.out.add_note(dt.track_no, dt.note_number, start, end)
+            dt.count += count
             # print((start, end, dt.track_no, dt.note_number, cmd.count))
             return
 
@@ -212,16 +222,4 @@ class Driver:
                 dt.pos = dt.loop_pos
             else:
                 dt.track_end = True
-
-
-        
-
-
-
-
-
-                
-
-            
-
 

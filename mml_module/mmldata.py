@@ -74,9 +74,7 @@ class MMLData:
         for tr in self.track_list:
             self.show_track(tr)
 
-            print(f'Command:{len(tr.command_list)} Total:{tr.total_count} LoopStart:{tr.loop_start}')
-            print('-- End --')
-            print()
+            print(f'Track:{tr.track_no} Command:{len(tr.command_list)} Total:{tr.total_count} LoopStart:{tr.loop_start}')
 
     # トラック情報表示
     def show_track(self, tr : MMLTrack):
@@ -87,7 +85,6 @@ class MMLData:
             count_repeat = []
             loop_start_count = 0
 
-            print(f'Track:{tr.track_no}')
             for cmd in tr.command_list:
                 if cmd.cmdtype == CommandTypeEnum.REPEAT_START:
                     count_repeat.append(track_count)
@@ -98,7 +95,7 @@ class MMLData:
                     diff_count = track_count - repeat_start_count
                     repeat_count = cmd.value if cmd.value is not None else 2
                     repeat_track_count += diff_count * (repeat_count - 1)
-                    repeat_track_count -= escape_diff
+                    repeat_track_count -= (diff_count - escape_diff)
                     escape_diff = 0
                     continue
 
@@ -180,5 +177,3 @@ class MMLData:
         tmplist.append(MMLCommand('', CommandTypeEnum.TRACK_END, ArgTypeEnum.NOOPT, None))
         tr.command_list = tmplist
         return True
-
-
