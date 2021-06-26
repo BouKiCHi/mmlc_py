@@ -25,6 +25,7 @@ class DriveTrack:
     loop_count : int
     pos : int
     octave : int
+    volume : int
     transpose : int
     repeat : List[DriveRepeat]
     cmd_notenum : int
@@ -39,6 +40,7 @@ class DriveTrack:
         self.repeat = []
         self.pos = 0
         self.octave = 4
+        self.volume = 120
         self.transpose = 0
         self.cmd_notenum = 0
         self.track_end = False
@@ -151,6 +153,18 @@ class Driver:
         if cmd.cmdtype == CommandTypeEnum.SET_OCTAVE:
             dt.octave = cmd.value
             return
+        
+        if cmd.cmdtype == CommandTypeEnum.SET_VOLUME:
+            dt.volume = cmd.value
+            return
+
+        if cmd.cmdtype == CommandTypeEnum.VOLUME_DOWN:
+            dt.volume -= cmd.value
+            return
+
+        if cmd.cmdtype == CommandTypeEnum.VOLUME_UP:
+            dt.volume += cmd.value
+            return
             
         if cmd.cmdtype == CommandTypeEnum.OCTAVE_DOWN:
             dt.octave -= 1
@@ -194,7 +208,7 @@ class Driver:
 
             start = self.seconds
             end = self.seconds + (count * self.tick_per_seconds)
-            self.out.add_note(dt.track_no, dt.note_number, start, end)
+            self.out.add_note(dt.track_no, dt.note_number, start, end, dt.volume)
             dt.count += count
             # print((start, end, dt.track_no, dt.note_number, cmd.count))
             return
@@ -203,7 +217,7 @@ class Driver:
             dt.count += cmd.count
             start = self.seconds
             end = self.seconds + (cmd.count * self.tick_per_seconds)
-            self.out.add_note(dt.track_no, dt.note_number, start, end)
+            self.out.add_note(dt.track_no, dt.note_number, start, end, dt.volume)
             # print((start, end, dt.track_no, dt.note_number, cmd.count))
             return
 

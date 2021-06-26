@@ -15,14 +15,14 @@ class Output:
         self.track_list = []
     
     # コマンド追加
-    def add_note(self, no: int, note_number: int, start: float, end: float):
+    def add_note(self, no: int, note_number: int, start: float, end: float, volume: int):
 
         # テーブルを拡張する
         track_length = len(self.track_list)
         if no >= track_length:
             self.track_list = self.extend_track_list(no, track_length)
 
-        note = pretty_midi.Note(velocity=100, pitch=note_number, start=start, end=end)
+        note = pretty_midi.Note(velocity=volume, pitch=note_number, start=start, end=end)
         self.track_list[no].notes.append(note)
 
     # トラックリストを拡張
